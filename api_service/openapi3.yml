@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: FarmersEdge weekly forecast API for Winnipeg
+  description: 'This is a small API for Winnipeg weekly forcast app.'
+  contact:
+    email: samiul.azam.cse@gmail.com
+  version: 1.0.0
+servers:
+- url: http://localhost:5000
+components:
+  schemas:
+    weeklyResponse:
+      type: object
+      properties:
+        dayX:
+          type: array
+          items:
+            properties:
+              conditions:
+                type: string
+              datetime:
+                type: string
+              temperature:
+                type: string
+              wind_direction:
+                type: string
+              wind_speed:
+                type: string
+    dataRequest:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            properties:
+              conditions:
+                type: string
+              period_string:
+                type: string
+              temperature:
+                type: string
+              wind_direction:
+                type: string
+              wind_speed:
+                type: string
+paths:
+  /forecast:
+    get:
+      summary: Find weekly forecast based on a date-time or based on a date only. 
+      operationId: get_forecast
+      parameters:
+        - in: query
+          name: date
+          schema:
+            type: string
+          required: true
+          description: in YYYY-MM-DD format
+        - in: query
+          name: time
+          schema:
+            type: string
+          description: in HH:MM:SS format
+      responses:
+        422:
+          description: Invalid input (when date key is missing)
+          content: {}
+        200:
+          description: successful operation
+          content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/weeklyResponse'
+    post:
+      summary: Insert a single record or multiple records (maximum 1000s records) 
+      operationId: create_data
+      requestBody:
+        description: Todo object that needs to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataRequest'
+        required: true
+      responses:
+        400:
+          description: Bad request (number of records is more than 1000s )
+          content: {}
+        201:
+          description: successful operation
+          content: {}

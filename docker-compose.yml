@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  api:
+    build: ./api_service
+    command: python -u app.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api_service/app.py:/usr/src/app/app.py
+    depends_on:
+      - db
+  web:
+    build: ./app_with_backend
+    command: python -u app.py
+    ports:
+      - "8080:5000"
+    volumes:
+      - ./app_with_backend/app.py:/usr/src/app/app.py
+      - ./app_with_backend/templates:/usr/src/app/templates
+      - ./app_with_backend/static:/usr/src/app/static
+    depends_on:
+      - api
+  db:
+    image: mongo:latest

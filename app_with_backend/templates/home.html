@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    </head>
+    <body>
+        <h2>Select a Date: </h2>
+        <form action="/" method='post'>
+            <div>
+                <div>
+                    <label>Enter Date (YYYY-MM-DD):</label>
+                    <input type="text" id="date" name="date_pick">
+                </div>
+                <div>    
+                    <label>Enter Time (HH:MM:SS):</label>
+                    <input type="text" id="time" name="time_pick">
+                    <label>(optional)</label>
+                </div>
+                <input type="submit">
+            </div>
+        </form>
+        {% if display == 'na' %}
+            <div></div>
+        {% endif %}
+        {% if display == 'error' %}
+            <div>
+                <h3>Pls, provide a date value...</h3>
+            </div>
+        {% endif %}
+        {% if display == 'table' %}
+            <div>
+                <table style="width:50%">
+                    <tr>
+                        {% for value in head %}
+                            <th>{{ value }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for key, value in data.items() %}
+                        </tr>
+                            <td>{{ value[0]["datetime"] }}</td>
+                            <td>{{ value[0]["conditions"] }}</td>
+                            <td>{{ value[0]["temperature"] }}</td>
+                            <td>{{ value[0]["wind_speed"] }}</td>
+                            <td>{{ value[0]["wind_direction"] }}</td>
+                        </tr> 
+                    {% endfor %}
+                </table>
+            <div>
+        {% endif %}
+        {% if display == 'chart' %}
+        <div>
+            <table style="width:50%">
+                <tr>
+                    {% for value in head %}
+                        <th>{{ value }}</th>
+                    {% endfor %}
+                </tr>
+                </tr>
+                {% for key, value in data.items() %}
+                    {% for i in value %}
+                    </tr>
+                        <td>{{ i["datetime"] }}</td>
+                        <td>{{ i["conditions"] }}</td>
+                        <td>{{ i["temperature"] }}</td>
+                        <td>{{ i["wind_speed"] }}</td>
+                        <td>{{ i["wind_direction"] }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tr>
+            </table>
+        <div>
+        {% endif %}
+    </body>
+</html>
